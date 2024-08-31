@@ -1,33 +1,36 @@
-import db from '../database.js';
+import { JobPostModel } from '../database.js';
 import JobPost from '../models/JobPost.js';
 
-export const getPostById = (id) => {
-  return new Promise((resolve, reject) => {
-    db.get('SELECT * FROM JobPosts WHERE id = ?', [id], (err, row) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (row){
-            const jobPost = new JobPost(row.id, row.title, row.content);
-            resolve(jobPost);
-        }
-        else{
-            resolve(null);
-        }
-      }
-    });
-  });
+export const getPostById = async (id) => {
+  try {
+    const result = await JobPostModel.findByPk(id);
+    if (result) {
+      return new JobPost(result.id, result.title, result.companyName, result.payRange, result.workLocation, result.description);
+    }
+    return null;
+  } catch (error) {
+    throw new Error('Error retrieving post: ' + error.message);
+  }
 };
 
-export const createPost = (title, content) => {
-    return new Promise((resolve, reject) => {
-        db.run('INSERT INTO JobPosts (title, content) VALUES (?, ?)', [title, content], function (err) {
-            if (err) {
-                reject(err);
-            } else {
-                const jobPost = new JobPost(this.lastID, title, content);
-                resolve(jobPost);
-            }
-        });
-    });
+export const createPost = async (createJobPostDTO) => {
+  try {
+      const result = await JobPostModel.create({
+          title: createJobPostDTO.title,
+          companyName: createJobPostDTO.companyName,
+          payRange: createJobPostDTO.payRange,
+          workLocation: createJobPostDTO.workLocation,
+          description: createJobPostDTO.description,
+      });
+      return new JobPost({
+          id: result.id,
+          title: result.title,
+          companyName: result.companyName,
+          payRange: result.payRange,
+          workLocation: result.workLocation,
+          description: result.description,
+      });
+  } catch (error) {
+      throw new Error('Error creating post: ' + error.message);
+  }
 };

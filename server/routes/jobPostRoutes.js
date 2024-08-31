@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPostById, createPost } from '../repository/jobPostRepository.js'; 
+import CreateJobPostDTO from '../DTOs/CreateJobPostDTO.js'
 
 const router = express.Router();
 
@@ -19,9 +20,9 @@ router.get('/posts/:id', async (req, res) => {
 
 router.post('/posts', async (req, res) => {
     try {
-        const title = req.body.title;
-        const content = req.body.content;
-        const newPost = await createPost(title, content);
+        const createJobPostDTO = new CreateJobPostDTO(req.body);
+        console.log(createJobPostDTO);
+        const newPost = await createPost(createJobPostDTO);
         res.status(201).json(newPost);
     } catch (error) {
         res.status(500).json({ message: 'Error creating post', error });

@@ -1,6 +1,6 @@
 
 import express from 'express';
-import router from './routes/jobPosts.js';
+import router from './routes/jobPostRoutes.js';
 
 const app = express();
 const port = 3000;

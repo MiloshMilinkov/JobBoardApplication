@@ -1,6 +1,5 @@
-class JobPost {
-    constructor({ id = null, title, companyName, payRange, workLocation, description }) {
-        this.id = id;
+class CreateJobPostDTO {
+    constructor({ title, companyName, payRange, workLocation, description }) {
         this.title = title;
         this.companyName = companyName;
         this.payRange = payRange;
@@ -8,5 +7,4 @@ class JobPost {
         this.description = description;
     }
 }
-
-export default JobPost;
+export default CreateJobPostDTO;

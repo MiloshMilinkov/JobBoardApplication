@@ -1,20 +1,42 @@
-import sqlite3 from 'sqlite3';
+import { Sequelize, DataTypes } from 'sequelize';
 import path from 'path';
 
 const __dirname = path.resolve();
 
-const db = new sqlite3.Database(path.resolve(__dirname, 'posts.db'), (err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
-  }
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: path.resolve(__dirname, 'posts.db')
 });
 
-db.run(`CREATE TABLE IF NOT EXISTS JobPosts (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          title TEXT NOT NULL,
-          content TEXT NOT NULL
-        )`);
+// Define the Sequelize model
+const JobPostModel = sequelize.define('JobPost', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  companyName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  payRange: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  workLocation: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  }
+}, {
+  timestamps: false
+});
 
-export default db;
+// Sync the model with the database
+sequelize.sync({ force: true }).then(() => {
+  console.log('Database & tables created!');
+});
+
+export { sequelize, JobPostModel };

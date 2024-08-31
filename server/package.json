@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node app.js",
-      "dev": "node app.js"
+    "start": "node app.js",
+    "dev": "node app.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "sequelize": "^6.37.3",
+    "server": "file:",
     "sqlite3": "^5.1.7"
   }
 }
