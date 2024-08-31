@@ -1,0 +1,82 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs
+*.log
+*.log.*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# dotenv environment variables file
+.env
+
+# SQLite database files
+*.db
+*.sqlite
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Webpack files
+dist/
+build/
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Vue.js
+/public/css/
+public/js/
+public/images/
+
+# Ignore built files
+/dist
+/.cache
+
+# Ignore local env files
+.env.local
+.env.*.local
+
+# Other
+*.log
+*.log.*
+*.cache
+*.tmp
+tmp/
+temp/
+
+# MacOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
