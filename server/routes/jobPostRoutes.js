@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPostById, createPost } from '../repository/jobPostRepository.js'; 
+import { getPostById, createPost, getPosts } from '../repository/jobPostRepository.js'; 
 import CreateJobPostDTO from '../DTOs/CreateJobPostDTO.js'
 
 const router = express.Router();
@@ -12,6 +12,22 @@ router.get('/posts/:id', async (req, res) => {
             res.json(post);
         } else {
             res.status(404).json({ message: 'Post not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving post', error });
+    }
+});
+
+router.get('/posts', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const postsData = await getPosts(page, limit);
+        if (postsData ) {
+            res.json(postsData );
+        } else {
+            res.status(404).json({ message: 'Posts not found' });
         }
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving post', error });

@@ -30,8 +30,6 @@ const JobPostModel = sequelize.define('JobPost', {
     type: DataTypes.TEXT,
     allowNull: false
   }
-}, {
-  timestamps: false
 });
 
 // Sync the model with the database
