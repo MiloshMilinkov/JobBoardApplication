@@ -22,8 +22,10 @@ router.get('/posts', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const filterByTittle = req.query.filterByTittle;
+        const filterByLocation= req.query.filterByLocation;
 
-        const postsData = await getPosts(page, limit);
+        const postsData = await getPosts(page, limit, filterByTittle, filterByLocation);
         if (postsData ) {
             res.json(postsData );
         } else {

@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { JobPostModel } from '../database.js';
 import JobPost from '../models/JobPost.js';
 
@@ -14,19 +15,30 @@ export const getPostById = async (id) => {
   }
 };
 
-//Return all job posts mapped to code object for a desired page
-export const getPosts = async (page = 1, limit = 10) => {
+//Return all JobPosts
+export const getPosts = async (page = 1, limit = 10, filterByTittle = '', filterByLocation = '') => {
   try {
     const offset = (page - 1) * limit;
+
+    const searchFilterForTitle = filterByTittle 
+      ? {
+          title: {[Op.like]: `%${filterByTittle}%`},
+          workLocation: {[Op.like]: `%${filterByLocation}%`}
+        } 
+      : {};
+
     const results = await JobPostModel.findAll({
+      where: searchFilterForTitle,
       limit: limit,
       offset: offset,
     });
 
-    const totalPosts = await JobPostModel.count();
+    const numOfTotalPosts = await JobPostModel.count({
+      where: searchFilterForTitle,
+    });
 
-    if (results) {
-      const jobPosts = results.map(result => new JobPost({
+    if (results.length > 0) {
+      const jobPosts = results.map(result =>({
         id: result.id,
         title: result.title,
         companyName: result.companyName,
@@ -36,13 +48,20 @@ export const getPosts = async (page = 1, limit = 10) => {
       }));
 
       return {
-        totalPosts,
-        totalPages: Math.ceil(totalPosts / limit),
+        numOfTotalPosts,
+        totalPages: Math.ceil(numOfTotalPosts / limit),
         currentPage: page,
         posts: jobPosts,
       };
     }
-    return null;
+
+    return {
+      totalPosts: 0,
+      totalPages: 0,
+      currentPage: page,
+      posts: [],
+    };
+
   } catch (error) {
     throw new Error('Error retrieving post: ' + error.message);
   }
