@@ -1,6 +1,6 @@
-import { Op } from 'sequelize';
 import { JobPostModel } from '../database.js';
 import JobPost from '../models/JobPost.js';
+import { searchMethod } from '../Helpers/searchHelper.js';
 
 //Return a job post bassed on id
 export const getPostById = async (id) => {
@@ -20,21 +20,16 @@ export const getPosts = async (page = 1, limit = 10, filterByTittle = '', filter
   try {
     const offset = (page - 1) * limit;
 
-    const searchFilterForTitle = filterByTittle 
-      ? {
-          title: {[Op.like]: `%${filterByTittle}%`},
-          workLocation: {[Op.like]: `%${filterByLocation}%`}
-        } 
-      : {};
+    const searchFilter = searchMethod(filterByTittle, filterByLocation);
 
     const results = await JobPostModel.findAll({
-      where: searchFilterForTitle,
+      where: searchFilter,
       limit: limit,
       offset: offset,
     });
 
     const numOfTotalPosts = await JobPostModel.count({
-      where: searchFilterForTitle,
+      where: searchFilter,
     });
 
     if (results.length > 0) {
@@ -89,3 +84,5 @@ export const createPost = async (createJobPostDTO) => {
       throw new Error('Error creating post: ' + error.message);
   }
 };
+
+
